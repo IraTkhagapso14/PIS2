@@ -24,13 +24,6 @@ class Client:
             raise ValueError("client_id должен быть положительным целым числом")
         self._client_id = value
 
-    @staticmethod
-    def validate_name(value, field_name):
-        value = str(value).strip()
-        if not value or not value.replace(" ", "").isalpha():
-            raise ValueError(f"{field_name} должно содержать только буквы и не быть пустым")
-        return value.title()
-
     @property
     def last_name(self):
         return self._last_name
@@ -103,6 +96,13 @@ class Client:
             raise ValueError("Номер водительского удостоверения должен содержать 10 цифр")
         self._driver_license = value
 
+    @staticmethod
+    def validate_name(value, field_name):
+        value = str(value).strip()
+        if not value or not value.replace(" ", "").isalpha():
+            raise ValueError(f"{field_name} должно содержать только буквы и не быть пустым")
+        return value.title()
+
     def full_repr(self):
         return ", ".join(f"{key}='{getattr(self, key)}'" for key in self.FIELDS if getattr(self, key) is not None)
 
@@ -119,6 +119,44 @@ class Client:
 
     def __repr__(self):
         return self.full_repr()
+
+    def to_short(self):
+        return ClientShort(self)
+
+
+class ClientShort:
+    def __init__(self, client: Client):
+        self.__client_id = client.client_id
+
+
+        initials = f"{client.first_name[0]}."
+        if client.otch:
+            initials += f"{client.otch[0]}."
+        self.__fio_short = f"{client.last_name} {initials}"
+
+        self.__contact = client.email if client.email else client.phone
+
+    @property
+    def client_id(self):
+        return self.__client_id
+
+    @property
+    def fio_short(self):
+        return self.__fio_short
+
+    @property
+    def contact(self):
+        return self.__contact
+
+    def __repr__(self):
+        return f"ClientShort(id={self.client_id}, fio='{self.fio_short}', contact='{self.contact}')"
+
+    def __eq__(self, other):
+        if not isinstance(other, ClientShort):
+            return False
+        return (self.client_id == other.client_id and
+                self.fio_short == other.fio_short and
+                self.contact == other.contact)
 
 
 client1 = Client(
@@ -140,10 +178,11 @@ client2 = Client(
     phone="+79123488567",
     driver_license="0987654321"
 )
-print(client1)
-print(client2)
+
+print("Полные версии")
 print(client1.full_repr())
 print(client2.full_repr())
-print(client1.short_repr())
-print(client2.short_repr())
-print(client1 == client2)  
+
+print("\n Краткие версии")
+print(client1.to_short())
+print(client2.to_short())
