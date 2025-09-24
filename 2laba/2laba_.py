@@ -60,10 +60,36 @@ class Clients_rep_json:
             print("Ошибка при сортировке:", str(e))
             return clients
 
+    def add_client(self, client_data):
+        try:
+            clients = self.read_all()
+            if clients:
+                max_id = max(client.get("client_id", 0) for client in clients)
+                new_id = max_id + 1
+            else:
+                new_id = 1
+        
+            new_client = {"client_id": new_id}
+            new_client.update(client_data)  
+            clients.append(new_client)
+            self.write_all(clients)
+            return new_client
+        except Exception as e:
+            print("Ошибка при добавлении клиента:", str(e))
+            return None
+
+
 if __name__ == "__main__":
     repo = Clients_rep_json("clients.json")
-
-    sorted_clients = repo.sort_by_field("last_name")
-    print("\nКлиенты, отсортированные по фамилии:")
-    for c in sorted_clients:
-        print(c)
+    new_client = {
+        "last_name": "Шараева",
+        "first_name": "Олеся",
+        "otch": "Ивановна",
+        "address": "ул. Обрывная, 15",
+        "phone": "+79123456711",
+        "email": "sharoi@mail.ru",
+        "driver_license": "9894820483"
+    }
+    added_client = repo.add_client(new_client)
+    print("\nДобавлен новый клиент:")
+    print(added_client)
