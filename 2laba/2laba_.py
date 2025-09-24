@@ -78,18 +78,32 @@ class Clients_rep_json:
             print("Ошибка при добавлении клиента:", str(e))
             return None
 
+    def update_client_by_id(self, client_id, updated_data):
+        try:
+            clients = self.read_all()
+            for i, client in enumerate(clients):
+                if client.get("client_id") == client_id:
+                    for key, value in updated_data.items():
+                        if key != "client_id":
+                            client[key] = value
+                    clients[i] = client
+                    self.write_all(clients)
+                    return client
+            print(f"Клиент с ID={client_id} не найден")
+            return None
+        except Exception as e:
+            print("Ошибка при обновлении клиента:", str(e))
+            return None
+
 
 if __name__ == "__main__":
     repo = Clients_rep_json("clients.json")
-    new_client = {
-        "last_name": "Шараева",
-        "first_name": "Олеся",
-        "otch": "Ивановна",
-        "address": "ул. Обрывная, 15",
-        "phone": "+79123456711",
-        "email": "sharoi@mail.ru",
-        "driver_license": "9894820483"
+    updated_data = {
+        "last_name": "Иванов",
+        "phone": "+79123456799",
+        "address": "ул. Ленина, 10"
     }
-    added_client = repo.add_client(new_client)
-    print("\nДобавлен новый клиент:")
-    print(added_client)
+
+    updated_client = repo.update_client_by_id(3, updated_data)
+    print("\nОбновлённый клиент:")
+    print(updated_client)
