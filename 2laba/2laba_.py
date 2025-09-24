@@ -109,9 +109,17 @@ class Clients_rep_json:
             print("Ошибка при удалении клиента:", str(e))
             return False
 
+    def get_count(self):
+        try:
+            clients = self.read_all()
+            return len(clients)
+        except Exception as e:
+            print("Ошибка при подсчёте клиентов:", str(e))
+            return 0
+
+
 if __name__ == "__main__":
     repo = Clients_rep_json("clients.json")
-    result = repo.delete_client_by_id(3)
-    if result:
-        print("Клиент удалён успешно")
+    total_clients = repo.get_count()
+    print("Всего клиентов:", total_clients)
 
