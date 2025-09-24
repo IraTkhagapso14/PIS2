@@ -45,42 +45,15 @@ class Clients_rep_json:
             print("Ошибка при поиске клиента по ID: " + str(e))
             return None
 
+    def get_k_n_short_list(self, n, k):
+        clients = self.read_all()
+        start_index = (n - 1) * k
+        end_index = start_index + k
+        return clients[start_index:end_index]  
+
 if __name__ == "__main__":
     repo = Clients_rep_json("clients.json")
-    clients = repo.read_all()
-    
-    for client in clients:
-        print(client)
-     new_clients = [
-        {
-            "client_id": 1,
-            "last_name": "Иванов",
-            "first_name": "Иван",
-            "otch": "Иванович",
-            "address": "ул. Северная, 123",
-            "phone": "+79123456789",
-            "email": "ivanov@mail.ru",
-            "driver_license": "1234567890"
-        },
-        {
-            "client_id": 2,
-            "last_name": "Петров",
-            "first_name": "Петр",
-            "otch": "Петрович",
-            "address": "ул. Архангельская, 456",
-            "phone": "+79123456780",
-            "email": "petrov@mail.ru",
-            "driver_license": "0987654321"
-        }
-    ]
-    repo.write_all(new_clients)
-    client_id = 1
-    client = repo.get_by_id(client_id)
-    
-    if client:
-        print("Найден клиент с ID", client_id)
-        print(client)
-    else:
-        print("Клиент с ID", client_id, "не найден")
-    
 
+    page_clients = repo.get_k_n_short_list(n=3, k=5)
+    for client in page_clients:
+        print(client)
