@@ -33,6 +33,18 @@ class Clients_rep_json:
             print("Ошибка при записи в файл: " + str(e)) 
             return False
 
+    def get_by_id(self, client_id):
+        try:
+            clients = self.read_all()
+            for client in clients:
+                if client.get('client_id') == client_id:
+                    return client
+            
+            return None
+        except Exception as e:
+            print("Ошибка при поиске клиента по ID: " + str(e))
+            return None
+
 if __name__ == "__main__":
     repo = Clients_rep_json("clients.json")
     clients = repo.read_all()
@@ -62,3 +74,13 @@ if __name__ == "__main__":
         }
     ]
     repo.write_all(new_clients)
+    client_id = 1
+    client = repo.get_by_id(client_id)
+    
+    if client:
+        print("Найден клиент с ID", client_id)
+        print(client)
+    else:
+        print("Клиент с ID", client_id, "не найден")
+    
+
