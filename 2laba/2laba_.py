@@ -95,15 +95,23 @@ class Clients_rep_json:
             print("Ошибка при обновлении клиента:", str(e))
             return None
 
+    def delete_client_by_id(self, client_id):
+        try:
+            clients = self.read_all()
+            for i, client in enumerate(clients):
+                if client.get("client_id") == client_id:
+                    del clients[i]  
+                    self.write_all(clients)
+                    return True
+            print(f"Клиент с ID={client_id} не найден")
+            return False
+        except Exception as e:
+            print("Ошибка при удалении клиента:", str(e))
+            return False
 
 if __name__ == "__main__":
     repo = Clients_rep_json("clients.json")
-    updated_data = {
-        "last_name": "Иванов",
-        "phone": "+79123456799",
-        "address": "ул. Ленина, 10"
-    }
+    result = repo.delete_client_by_id(3)
+    if result:
+        print("Клиент удалён успешно")
 
-    updated_client = repo.update_client_by_id(3, updated_data)
-    print("\nОбновлённый клиент:")
-    print(updated_client)
