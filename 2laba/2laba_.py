@@ -66,9 +66,35 @@ class Clients_rep_yaml:
             print("Ошибка при сортировке: " + str(e))
             return clients
 
+def add_client(self, client_data):
+        try:
+            clients = self.read_all()
+            if clients:
+                max_id = max(client.get("client_id", 0) for client in clients)
+                new_id = max_id + 1
+            else:
+                new_id = 1
+            new_client = {"client_id": new_id}
+            new_client.update(client_data)
+            clients.append(new_client)
+            self.write_all(clients)
+            return new_client
+        except Exception as e:
+            print("Ошибка при добавлении клиента: " + str(e))
+            return None
+
 if __name__ == "__main__":
     repo = Clients_rep_yaml("clients.yaml")
-    sorted_clients = repo.sort_by_field("last_name")
-    print("Клиенты, отсортированные по фамилии:")
-    for client in sorted_clients:
-        print(client)
+    new_client = {
+        "last_name": "Новиков",
+        "first_name": "Дмитрий",
+        "otch": "Сергеевич",
+        "address": "ул. Новая, 15",
+        "phone": "+79123456711",
+        "email": "novikov@mail.ru",
+        "driver_license": "55672940246"
+    }
+
+    added_client = repo.add_client(new_client)
+    print("Добавлен новый клиент:")
+    print(added_client)
