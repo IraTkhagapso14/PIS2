@@ -66,7 +66,7 @@ class Clients_rep_yaml:
             print("Ошибка при сортировке: " + str(e))
             return clients
 
-def add_client(self, client_data):
+    def add_client(self, client_data):
         try:
             clients = self.read_all()
             if clients:
@@ -83,18 +83,36 @@ def add_client(self, client_data):
             print("Ошибка при добавлении клиента: " + str(e))
             return None
 
+    def update_client_by_id(self, client_id, updated_data):
+        try:
+            clients = self.read_all()
+            for i, client in enumerate(clients):
+                if client.get("client_id") == client_id:
+                    for key, value in updated_data.items():
+                        if key != "client_id":
+                            client[key] = value
+                    clients[i] = client
+                    self.write_all(clients)
+                    return client
+            print("Клиент с ID=" + str(client_id) + " не найден")
+            return None
+        except Exception as e:
+            print("Ошибка при обновлении клиента: " + str(e))
+            return None
+
 if __name__ == "__main__":
     repo = Clients_rep_yaml("clients.yaml")
-    new_client = {
+    update_client = {
         "last_name": "Новиков",
         "first_name": "Дмитрий",
         "otch": "Сергеевич",
-        "address": "ул. Новая, 15",
-        "phone": "+79123456711",
+        "address": "ул. Новая, 10",
+        "phone": "+79123456799",
         "email": "novikov@mail.ru",
-        "driver_license": "55672940246"
+        "driver_license": "DL000099"
     }
 
-    added_client = repo.add_client(new_client)
-    print("Добавлен новый клиент:")
-    print(added_client)
+    updated_client = repo.update_client_by_id(3, update_client)
+    print("\nОбновлённый клиент:")
+    print(updated_client)
+
