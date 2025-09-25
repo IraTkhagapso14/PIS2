@@ -51,7 +51,14 @@ class Clients_rep_yaml:
         print("Клиент с ID=" + str(client_id) + " не найден")
         return None
 
+    def get_k_n_short_list(self, n, k):
+        clients = self.read_all()
+        start_index = (n - 1) * k
+        end_index = start_index + k
+        return clients[start_index:end_index]
+
 if __name__ == "__main__":
     repo = Clients_rep_yaml("clients.yaml")
-    client = repo.get_by_id(1)  
-    print(client)
+    page_clients = repo.get_k_n_short_list(n=2, k=3)
+    for client in page_clients:
+        print(client)
