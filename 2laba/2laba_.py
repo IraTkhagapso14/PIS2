@@ -43,34 +43,15 @@ class Clients_rep_yaml:
             print("Ошибка при записи в файл: " + str(e))
             return False
 
+    def get_by_id(self, client_id):
+        clients = self.read_all()
+        for client in clients:
+            if client.get("client_id") == client_id:
+                return client
+        print("Клиент с ID=" + str(client_id) + " не найден")
+        return None
+
 if __name__ == "__main__":
     repo = Clients_rep_yaml("clients.yaml")
-    clients = [
-        {
-            "client_id": 1,
-            "last_name": "Сергеев",
-            "first_name": "Федор",
-            "otch": "Иннокеньевич",
-            "address": "ул. Примерная, 19",
-            "phone": "+79123456789",
-            "email": "seryi@mail.ru",
-            "driver_license": "1234567890"
-        },
-        {
-            "client_id": 2,
-            "last_name": "Кривцов",
-            "first_name": "Никита",
-            "otch": "Сергеевич",
-            "address": "ул. Тестовая, 7",
-            "phone": "+79123456780",
-            "email": "petrov@mail.ru",
-            "driver_license": "0987654321"
-        }
-    ]
-    
-    if repo.write_all(clients):
-        print("Данные успешно записаны")
-    
-    clients = repo.read_all()
-    for client in clients:
-        print(client)
+    client = repo.get_by_id(1)  
+    print(client)
