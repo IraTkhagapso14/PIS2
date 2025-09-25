@@ -1,0 +1,17 @@
+  - client_id: 1
+    last_name: Смирнов
+    first_name: Вячеслав
+    otch: Игоревич
+    address: "Москва, ул. Ленина, 10"
+    phone: "+79990001122"
+    email: smirn@mail.ru
+    driver_license: "1234567890"
+
+  - client_id: 2
+    last_name: Максимов
+    first_name: Максим
+    otch: Ильич
+    address: "Санкт-Петербург, ул.Солнечная,12"
+    phone: "+79995556677"
+    email: max@mail.ru
+    driver_license: "9876543210"
