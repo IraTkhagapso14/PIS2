@@ -56,9 +56,19 @@ class Clients_rep_yaml:
         start_index = (n - 1) * k
         end_index = start_index + k
         return clients[start_index:end_index]
+        
+    def sort_by_field(self, field_name, reverse=False):
+        clients = self.read_all()
+        try:
+            sorted_clients = sorted(clients, key=lambda x: x.get(field_name, ""), reverse=reverse)
+            return sorted_clients
+        except Exception as e:
+            print("Ошибка при сортировке: " + str(e))
+            return clients
 
 if __name__ == "__main__":
     repo = Clients_rep_yaml("clients.yaml")
-    page_clients = repo.get_k_n_short_list(n=2, k=3)
-    for client in page_clients:
+    sorted_clients = repo.sort_by_field("last_name")
+    print("Клиенты, отсортированные по фамилии:")
+    for client in sorted_clients:
         print(client)
