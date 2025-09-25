@@ -100,19 +100,30 @@ class Clients_rep_yaml:
             print("Ошибка при обновлении клиента: " + str(e))
             return None
 
+ def delete_client_by_id(self, client_id):
+        try:
+            clients = self.read_all()
+            for i, client in enumerate(clients):
+                if client.get("client_id") == client_id:
+                    del clients[i]
+                    self.write_all(clients)
+                    print("Клиент с ID=" + str(client_id) + " удалён")
+                    return True
+            print("Клиент с ID=" + str(client_id) + " не найден")
+            return False
+        except Exception as e:
+            print("Ошибка при удалении клиента: " + str(e))
+            return False
+
 if __name__ == "__main__":
     repo = Clients_rep_yaml("clients.yaml")
-    update_client = {
-        "last_name": "Новиков",
-        "first_name": "Дмитрий",
-        "otch": "Сергеевич",
-        "address": "ул. Новая, 10",
-        "phone": "+79123456799",
-        "email": "novikov@mail.ru",
-        "driver_license": "DL000099"
-    }
+    success = repo.delete_client_by_id(3)
+    if success:
+        print("Удаление прошло успешно")
+    else:
+        print("Удаление не удалось")
 
-    updated_client = repo.update_client_by_id(3, update_client)
-    print("\nОбновлённый клиент:")
-    print(updated_client)
+    clients = repo.read_all()
+    for client in clients:
+        print(client)
 
