@@ -100,7 +100,7 @@ class Clients_rep_yaml:
             print("Ошибка при обновлении клиента: " + str(e))
             return None
 
- def delete_client_by_id(self, client_id):
+     def delete_client_by_id(self, client_id):
         try:
             clients = self.read_all()
             for i, client in enumerate(clients):
@@ -114,16 +114,19 @@ class Clients_rep_yaml:
         except Exception as e:
             print("Ошибка при удалении клиента: " + str(e))
             return False
+        
+    def get_count(self):
+        try:
+            clients = self.read_all()
+            return len(clients)
+        except Exception as e:
+            print("Ошибка при подсчёте элементов: " + str(e))
+            return 0
 
 if __name__ == "__main__":
     repo = Clients_rep_yaml("clients.yaml")
-    success = repo.delete_client_by_id(3)
-    if success:
-        print("Удаление прошло успешно")
-    else:
-        print("Удаление не удалось")
+    count = repo.get_count()
+    print("Количество клиентов в файле:", count)
 
-    clients = repo.read_all()
-    for client in clients:
-        print(client)
+
 
